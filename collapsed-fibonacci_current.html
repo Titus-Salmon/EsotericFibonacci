@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        #circ {
+            width: 50%;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div>
+        <label for="firstNumber">Enter 1st # (1-9) of collapsed fibonacci sequence</label>
+        <input type="number" min=1 max=9 id="firstNumber">
+
+        <br>
+
+        <label for="secondNumber">Enter 2nd # (1-9) of collapsed fibonacci sequence</label>
+        <input type="number" min=1 max=9 id="secondNumber">
+        <button onclick="fibo();">Submit</button>
+
+    </div>
+
+
+    <canvas id="circ" width="700" height="700"> </canvas>
+
+    <script>
+        function fibo() {
+
+            document.onmousemove = function (e) { //shows cursor position (x,y coord)
+                var xpos = e.pageX;
+                var ypos = e.pageY;
+                e.target.title = "X=" + xpos + " Y=" + ypos;
+            };
+
+
+            var circArr = new Array();
+
+            circArr[0] = new Array(1.7428, .334); //point 1 on circle
+            circArr[1] = new Array(2.0848, .9264); //point 2 on circle
+            circArr[2] = new Array(1.966, 1.6); //point 3 on circle
+            circArr[3] = new Array(1.442, 2.0397); //point 4 on circle
+            circArr[4] = new Array(.758, 2.0397); //point 5 on circle
+            circArr[5] = new Array(.234, 1.6); //point 6 on circle
+            circArr[6] = new Array(.1152, .9264); //point 7 on circle
+            circArr[7] = new Array(.4572, .334); //point 8 on circle
+            circArr[8] = new Array(1.1, .1); //point 9 on circle
+
+            var circArrSeq = [];
+            var seqArr = new Array();
+
+
+            var c = document.getElementById("circ");
+            var ctx = c.getContext("2d");
+
+            //clear any previous canvas elements
+            ctx.clearRect(0, 0, c.width, c.height);
+
+            //draw circle
+            ctx.beginPath();
+            ctx.arc(330, 330, 300, 0, 2 * Math.PI);
+            ctx.stroke();
+            //draw circle
+
+            function collapsedFibonacci(num) {
+
+                var a = document.getElementById("firstNumber").value;
+                console.log(a);
+
+                var b = document.getElementById("secondNumber").value;
+                console.log(b);
+
+                var temp;
+
+                var num = 1;
+                while (num < 26) {
+                    if (Number(a) >= 10) {
+                        a =
+                            Math.floor(Number(a) / 10) +
+                            Math.round(10 * (Number(a) / 10 - Math.floor(Number(a) / 10)));
+                    }
+                    if (Number(b) >= 10) {
+                        b =
+                            Math.floor(Number(b) / 10) +
+                            Math.round(10 * (Number(b) / 10 - Math.floor(Number(b) / 10)));
+                    }
+                    temp = Number(a);
+                    a = Number(a) + Number(b);
+                    b = temp;
+                    console.log(Number(b));
+                    seqArr.push(Number(b));
+                    var valueOfIndexN = seqArr[num - 1];
+                    console.log(circArr[valueOfIndexN - 1]);
+                    circArrSeq.push(circArr[valueOfIndexN - 1]);
+                    num++;
+                }
+                console.log('seqArr = ' + seqArr);
+                console.log('circArrSeq = ' + circArrSeq);
+            }
+
+            collapsedFibonacci(25);
+
+            function drawFibo() {
+                for (n = 1; n < 25; n++) {
+
+                    (function (n) { //use Immediately Invoked Function Expression to slow down the loop
+                        setTimeout(function () {
+
+                            var canv = document.getElementById("circ");
+                            var cntxt = canv.getContext("2d");
+
+                            //save canvas
+                            cntxt.save();
+
+                            startX = (300 * circArrSeq[n - 1][0]);
+                            endX = (300 * circArrSeq[n][0]);
+                            startY = (300 * circArrSeq[n - 1][1]);
+                            endY = (300 * circArrSeq[n][1]);
+
+                            cntxt.beginPath();
+                            cntxt.moveTo(startX, startY);
+                            cntxt.lineTo(endX, endY);
+                            cntxt.stroke();
+
+                            //rotate canvas AT sequence number (1-9), BY 40deg*(sequence number)==================================================
+                            cntxt.translate(endX, endY); //where to rotate from
+                            cntxt.rotate(40 * Math.PI / 180 * (seqArr[n])); //how much to rotate by
+
+                            //type number
+                            cntxt.font = "2em Verdana";
+                            cntxt.textAlign = "center";
+                            cntxt.fillText(seqArr[n], circArrSeq[n][0], circArrSeq[n][1]);
+                            //rotate canvas back to original position
+                            cntxt.restore();
+
+                        }, 1000 * n);
+                    })(n);
+                }
+            }
+            drawFibo();
+
+
+        }
+    </script>
+</body>
+
+</html>
