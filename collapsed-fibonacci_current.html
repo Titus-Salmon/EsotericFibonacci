@@ -37,35 +37,47 @@
             };
 
 
-            var circArr = new Array();
+            var circArr = [];
 
-            circArr[0] = new Array(1.7428, .334); //point 1 on circle
-            circArr[1] = new Array(2.0848, .9264); //point 2 on circle
-            circArr[2] = new Array(1.966, 1.6); //point 3 on circle
-            circArr[3] = new Array(1.442, 2.0397); //point 4 on circle
-            circArr[4] = new Array(.758, 2.0397); //point 5 on circle
-            circArr[5] = new Array(.234, 1.6); //point 6 on circle
-            circArr[6] = new Array(.1152, .9264); //point 7 on circle
-            circArr[7] = new Array(.4572, .334); //point 8 on circle
-            circArr[8] = new Array(1.1, .1); //point 9 on circle
+            circArr[0] = [1.7428, .334]; //point 1 on circle
+            circArr[1] = [2.0848, .9264]; //point 2 on circle
+            circArr[2] = [1.966, 1.6]; //point 3 on circle
+            circArr[3] = [1.442, 2.0397]; //point 4 on circle
+            circArr[4] = [.758, 2.0397]; //point 5 on circle
+            circArr[5] = [.234, 1.6]; //point 6 on circle
+            circArr[6] = [.1152, .9264]; //point 7 on circle
+            circArr[7] = [.4572, .334]; //point 8 on circle
+            circArr[8] = [1.1, .1]; //point 9 on circle
+
+            console.log('circArr==>', circArr)
 
             var circArrSeq = [];
-            var seqArr = new Array();
+            var seqArr = [];
 
 
             var c = document.getElementById("circ");
-            var ctx = c.getContext("2d");
+            var ctx = c.getContext(
+            "2d"); // HTMLCanvasElement.getContext() method, which for basic usage takes a single string 
+            //as a parameter representing the type of context you want to retrieve.
 
             //clear any previous canvas elements
             ctx.clearRect(0, 0, c.width, c.height);
 
-            //draw circle
+            //v//draw circle//////////////////////////////////////////////////////////////////////////////////////////////
             ctx.beginPath();
-            ctx.arc(330, 330, 300, 0, 2 * Math.PI);
-            ctx.stroke();
-            //draw circle
+            ctx.arc(330, 330, 300, 0, 2 * Math.PI, true);
+            ctx.stroke(); //draws line (of circle)
 
-            function collapsedFibonacci(num) {
+            /*arc() takes six parameters. The first two specify the position of the arc's center (X and Y, respectively).
+            The third is the circle's radius, the fourth and fifth are the start and end angles at which to draw the circle
+            (so specifying 0 and 360 degrees gives us a full circle), and the sixth parameter defines whether the circle
+            should be drawn counterclockwise (anticlockwise) or clockwise (false is clockwise).
+
+            Note: 0 degrees is horizontally to the right.
+            */
+            //^//draw circle////////////////////////////////////////////////////////////////////////////////////////////////
+
+            function collapsedFibonacci(num) {//generates an array of the collapsed fibonacci sequence
 
                 var a = document.getElementById("firstNumber").value;
                 console.log(a);
@@ -77,12 +89,12 @@
 
                 var num = 1;
                 while (num < 26) {
-                    if (Number(a) >= 10) {
+                    if (Number(a) >= 10) {//esoteric addition for numbers 'a' beyond 9
                         a =
                             Math.floor(Number(a) / 10) +
                             Math.round(10 * (Number(a) / 10 - Math.floor(Number(a) / 10)));
                     }
-                    if (Number(b) >= 10) {
+                    if (Number(b) >= 10) {//esoteric addition for numbers 'a' beyond 9
                         b =
                             Math.floor(Number(b) / 10) +
                             Math.round(10 * (Number(b) / 10 - Math.floor(Number(b) / 10)));
@@ -97,11 +109,12 @@
                     circArrSeq.push(circArr[valueOfIndexN - 1]);
                     num++;
                 }
-                console.log('seqArr = ' + seqArr);
-                console.log('circArrSeq = ' + circArrSeq);
+                console.log('seqArr = ' + seqArr);//seqArr is the array containing the collapsed fibonacci sequence
+                console.log('circArrSeq = ' + circArrSeq);//circArrSeq is the array containing the [x,y] point
+                //coordinates for the collapsed fibonacci sequence
             }
 
-            collapsedFibonacci(25);
+            collapsedFibonacci(25);//run collapsed fibonacci for 25 iterations (it repeats after that)
 
             function drawFibo() {
                 for (n = 1; n < 25; n++) {
@@ -125,7 +138,7 @@
                             cntxt.lineTo(endX, endY);
                             cntxt.stroke();
 
-                            //rotate canvas AT sequence number (1-9), BY 40deg*(sequence number)==================================================
+                            //rotate canvas AT sequence number (1-9), BY 40deg*(sequence number)////////////////////////
                             cntxt.translate(endX, endY); //where to rotate from
                             cntxt.rotate(40 * Math.PI / 180 * (seqArr[n])); //how much to rotate by
 
@@ -133,7 +146,7 @@
                             cntxt.font = "2em Verdana";
                             cntxt.textAlign = "center";
                             cntxt.fillText(seqArr[n], circArrSeq[n][0], circArrSeq[n][1]);
-                            //rotate canvas back to original position
+                            //rotate canvas back to original position///////////////////////////////////////////////////
                             cntxt.restore();
 
                         }, 1000 * n);
